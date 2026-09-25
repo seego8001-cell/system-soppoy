@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>សៀវភៅឌីជីថល៖ មូលដ្ឋានគ្រឹះកុំព្យូទ័រ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Khmer Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Moul&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            800: '#0f172a',
+                            900: '#0b1329',
+                            700: '#1e293b'
+                        },
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706'
+                        }
+                    },
+                    fontFamily: {
+                        moul: ['Moul', 'serif'],
+                        body: ['Kantumruy Pro', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Kantumruy Pro', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .khmer-moul {
+            font-family: 'Moul', serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Print Specific Styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 12pt;
+            }
+            #content-container {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            .lesson-card {
+                page-break-inside: avoid;
+            }
+        }
+
+        .print-only {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- Top Navigation Header -->
+    <header class="no-print bg-navy-900 text-white shadow-md sticky top-0 z-40 border-b border-gold-500/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Left Side: Logo & Main Book Title -->
+                <div class="flex items-center space-x-4">
+                    <!-- Logo Image from user input -->
+                    <div class="bg-navy-800 p-1.5 rounded-lg border border-gold-500/50 shadow-inner flex items-center justify-center">
+                        <img src="1598.png" alt="Logo" class="h-12 w-auto object-contain" onerror="this.onerror=null; this.src='https://placehold.co/100x120/1e3a8a/ffffff?text=LOGO';">
+                    </div>
+                    <div>
+                        <span class="text-xs font-semibold tracking-widest text-gold-400 uppercase block">សៀវភៅសិក្សាឌីជីថល</span>
+                        <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-white khmer-moul leading-tight flex items-center gap-2">
+                            មូលដ្ឋានគ្រឹះកុំព្យូទ័រ
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Right Side Tools: Search & Print Button -->
+                <div class="flex items-center gap-3">
+                    <!-- Global Search Bar -->
+                    <div class="relative hidden md:block w-64">
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="ស្វែងរកមេរៀន ឬជំពូក..." 
+                            class="w-full bg-navy-800 text-sm text-white placeholder-slate-400 rounded-full pl-9 pr-4 py-2 border border-slate-700 focus:outline-none focus:border-gold-500">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
+                    </div>
+
+                    <!-- Global Print Button -->
+                    <button onclick="window.print()" class="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-navy-900 font-bold px-4 py-2 rounded-lg text-sm shadow-md transition duration-200 flex items-center gap-2">
+                        <i class="fa-solid fa-print"></i>
+                        <span class="hidden sm:inline">បោះពុម្ពមេរៀន (Print)</span>
+                    </button>
+
+                    <!-- Sidebar Toggle for Mobile -->
+                    <button onclick="toggleSidebar()" class="lg:hidden text-slate-300 hover:text-white p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex-1 max-w-7xl w-full mx-auto px-2 sm:px-6 lg:px-8 py-6 flex gap-6 relative">
+
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="no-print fixed lg:relative inset-y-0 left-0 z-30 w-80 bg-white border-r lg:border border-slate-200 lg:rounded-2xl shadow-sm transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col h-[calc(100vh-6rem)] lg:h-[calc(100vh-7rem)]">
+            
+            <!-- Sidebar Header & Progress Bar -->
+            <div class="p-4 border-b border-slate-100 bg-slate-50/50 rounded-t-2xl">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="font-bold text-slate-800 text-sm uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-primary-600"></i>
+                        មាតិការបស់សៀវភៅ
+                    </h2>
+                    <span id="lessonCountBadge" class="text-xs font-semibold bg-primary-100 text-primary-700 px-2.5 py-0.5 rounded-full">
+                        40 ជំពូក | 70 មេរៀន
+                    </span>
+                </div>
+
+                <!-- Mobile Search Input inside Sidebar -->
+                <div class="md:hidden mt-2 relative">
+                    <input type="text" id="mobileSearchInput" oninput="handleSearchMobile()" placeholder="ស្វែងរកមេរៀន..." 
+                        class="w-full bg-slate-100 text-xs text-slate-800 placeholder-slate-400 rounded-lg pl-8 pr-3 py-1.5 border border-slate-200 focus:outline-none focus:border-primary-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-slate-400 text-xs"></i>
+                </div>
+
+                <!-- Progress Tracker -->
+                <div class="mt-3">
+                    <div class="flex justify-between text-xs text-slate-500 mb-1">
+                        <span>ការអានបានសម្រេច:</span>
+                        <span id="progressText" class="font-semibold text-primary-700">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                        <div id="progressBar" class="bg-gold-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accordion / List of 40 Chapters -->
+            <div id="chaptersList" class="flex-1 overflow-y-auto p-3 space-y-2">
+                <!-- Javascript will populate 40 chapters and 70 lessons here dynamically -->
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="p-3 border-t border-slate-100 text-center text-xs text-slate-400 bg-slate-50 rounded-b-2xl">
+                រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 មូលដ្ឋានគ្រឹះកុំព្យូទ័រ
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col min-w-0">
+            
+            <!-- PRINT-ONLY HEADER (Appears only on printout) -->
+            <div class="print-only mb-6 border-b-2 border-navy-900 pb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <img src="1598.png" alt="Logo" class="h-16 w-auto" onerror="this.onerror=null; this.src='https://placehold.co/100x120/1e3a8a/ffffff?text=LOGO';">
+                        <div>
+                            <h1 class="text-xl font-bold text-navy-900 khmer-moul">សៀវភៅឌីជីថល៖ មូលដ្ឋានគ្រឹះកុំព្យូទ័រ</h1>
+                            <p class="text-xs text-slate-600">ឯកសារមេរៀនផ្លូវការសម្រាប់ស្វ័យសិក្សា និងការបណ្តុះបណ្តាល</p>
+                        </div>
+                    </div>
+                    <div class="text-right text-xs text-slate-500">
+                        <p>ថ្ងៃបោះពុម្ព: <span id="printDate"></span></p>
+                        <p>ទំព័រឯកសារមេរៀន</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson Content Container -->
+            <div id="contentContainer" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 md:p-10 flex-1 flex flex-col">
+                
+                <!-- Lesson Top Toolbar -->
+                <div class="no-print flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100 mb-6">
+                    <div class="flex items-center gap-2">
+                        <span id="currentChapterBadge" class="text-xs font-semibold bg-gold-100 text-gold-700 px-3 py-1 rounded-full">
+                            ជំពូកទី ១
+                        </span>
+                        <span id="currentLessonBadge" class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
+                            មេរៀនទី ១ នៃ ៧០
+                        </span>
+                    </div>
+
+                    <!-- Text Size Controls & Completion Checkbox -->
+                    <div class="flex items-center gap-3 text-sm">
+                        <div class="flex items-center bg-slate-100 rounded-lg p-1 border border-slate-200">
+                            <button onclick="changeFontSize(-1)" class="px-2.5 py-1 text-slate-600 hover:bg-white rounded font-bold" title="បង្រួមអក្សរ">A-</button>
+                            <span class="text-xs text-slate-400 px-1">|</span>
+                            <button onclick="changeFontSize(1)" class="px-2.5 py-1 text-slate-600 hover:bg-white rounded font-bold" title="ពង្រីកអក្សរ">A+</button>
+                        </div>
+                        <button onclick="toggleLessonCompletion()" id="completedBtn" class="flex items-center gap-1.5 text-xs font-medium px-3 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+                            <i class="fa-regular fa-circle-check text-slate-400" id="completedIcon"></i>
+                            <span id="completedText">សញ្ញាសម្គាល់ថាបានអាន</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Lesson Body -->
+                <div id="lessonBody" class="flex-1 space-y-6 text-slate-700 leading-relaxed text-base">
+                    <!-- Lesson HTML gets dynamically injected here -->
+                </div>
+
+                <!-- Navigation Controls (Previous / Next Lesson) -->
+                <div class="no-print pt-8 mt-8 border-t border-slate-100 flex items-center justify-between gap-4">
+                    <button onclick="prevLesson()" id="prevBtn" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium text-sm flex items-center gap-2 transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>មេរៀនមុន</span>
+                    </button>
+
+                    <div class="text-center hidden sm:block">
+                        <button onclick="window.print()" class="text-xs text-primary-600 hover:text-primary-800 underline font-medium flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-print"></i> បោះពុម្ពមេរៀននេះ
+                        </button>
+                    </div>
+
+                    <button onclick="nextLesson()" id="nextBtn" class="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-medium text-sm flex items-center gap-2 shadow-sm transition disabled:opacity-40 disabled:cursor-not-allowed">
+                        <span>មេរៀនបន្ទាប់</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Set Print Date
+        document.getElementById('printDate').innerText = new Date().toLocaleDateString('km-KH', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Master Data Structure: 40 Chapters and 70 Lessons
+        const courseData = [];
+
+        // Data Generation Function to build 40 chapters and 70 distinct lessons cleanly
+        function generateCourseData() {
+            const chapterTitles = [
+                "មូលដ្ឋានគ្រឹះនៃបច្ចេកវិទ្យាកុំព្យូទ័រ",
+                "រចនាសម្ព័ន្ធគ្រឿងបន្លាស់កុំព្យូទ័រ (Hardware Overview)",
+                "អង្គគណនា CPU និងល្បឿនដំណើរការ",
+                "អង្គចងចាំបណ្តោះអាសន្ន RAM និង Cache",
+                "ឧបករណ៍ផ្ទុកទិន្នន័យ (Storage Devices: HDD, SSD)",
+                "ឧបករណ៍បញ្ចូលទិន្នន័យ (Input Devices)",
+                "ឧបករណ៍បញ្ចេញទិន្នន័យ (Output Devices)",
+                "ប្រព័ន្ធម៉ូឌើបត (Motherboard & Architecture)",
+                "មូលដ្ឋានគ្រឹះនៃប្រព័ន្ធប្រតិបត្តិការ (Operating Systems)",
+                "ប្រព័ន្ធប្រតិបត្តិការ Microsoft Windows",
+                "ការគ្រប់គ្រង និងរៀបចំឯកសារ (File Management)",
+                "ការកំណត់មុខងារប្រព័ន្ធ (System Settings & Control Panel)",
+                "មូលដ្ឋានគ្រឹះ Microsoft Word - ការវាយអត្ថបទ",
+                "ការរៀបចំទម្រង់អត្ថបទ និងតារាងក្នុង Word",
+                "បច្ចេកទេសបង្កើតរបាយការណ៍ និងលិខិតផ្លូវការ",
+                "មូលដ្ឋានគ្រឹះ Microsoft Excel - ការបង្កើតតារាង",
+                "រូបមន្ត និងអនុគមន៍គណនា ក្នុង Excel (SUM, AVERAGE, IF)",
+                "ការបង្កើតក្រាហ្វ និងវិភាគទិន្នន័យក្នុង Excel",
+                "មូលដ្ឋានគ្រឹះ Microsoft PowerPoint - បង្កើតស្លាយ",
+                "បច្ចេកទេសធ្វើបទបង្ហាញប្រកបដោយអាជីព",
+                "មូលដ្ឋានគ្រឹះនៃបណ្តាញអ៊ីនធឺណិត (Internet Basics)",
+                "កម្មវិធីរុករកបណ្តាញ (Web Browsers: Chrome, Edge)",
+                "បច្ចេកទេសស្វែងរកព័ត៌មានលើ Google (Search Techniques)",
+                "ការប្រើប្រាស់អ៊ីមែល (Email Communication & Etiquette)",
+                "ការប្រើប្រាស់ Google Drive & Cloud Storage",
+                "សេវាកម្មពពក Microsoft OneDrive & Cloud Tools",
+                "សុវត្ថិភាពព័ត៌មានវិទ្យា និង Cyber Security",
+                "វីរុសកុំព្យូទ័រ និងកម្មវិធីការពារ Antivirus",
+                "ការបង្កើត និងគ្រប់គ្រងពាក្យសម្ងាត់ (Password Security)",
+                "ការការពារទិន្នន័យផ្ទាល់ខ្លួនលើបណ្តាញសង្គម",
+                "ប្រព័ន្ធបណ្តាញកុំព្យូទ័រ (Computer Networking Basics)",
+                "ឧបករណ៍បណ្តាញ Router, Switch, និង Modem",
+                "អាសយដ្ឋាន IP Address និង Domain Name System (DNS)",
+                "ការតភ្ជាប់បណ្តាញឥតខ្សែ Wi-Fi និង Network Security",
+                "ការថែទាំកុំព្យូទ័រប្រចាំថ្ងៃ (Computer Maintenance)",
+                "ការដោះស្រាយបញ្ហាកុំព្យូទ័រទូទៅ (Basic Troubleshooting)",
+                "មូលដ្ឋានគ្រឹះនៃការសរសេរកូដ (Introduction to Programming)",
+                "បច្ចេកវិទ្យាបញ្ញាសិប្បនិម្មិត (Artificial Intelligence / AI)",
+                "ការប្រើប្រាស់ AI Tools ក្នុងមុខជំនួញ និងការសិក្សា",
+                "បច្ចេកវិទ្យាអនាគត និងអាជីពក្នុងវិស័យ IT"
+            ];
+
+            const lessonTopics = [
+                // 1
+                ["អ្វីទៅជាកុំព្យូទ័រ? ប្រវត្តិ និងការវិវត្ត", "ប្រភេទកុំព្យូទ័រក្នុងយុគសម័យទំនើប"],
+                // 2
+                ["ស្វែងយល់ពី Hardware និង Software", "គោលការណ៍ធ្វើការ Input-Process-Output-Storage"],
+                // 3
+                ["ស្វែងយល់ពី Central Processing Unit (CPU)", "រចនាសម្ព័ន្ធ Core, Thread និង Clock Speed"],
+                // 4
+                ["តួនាទីរបស់ RAM ក្នុងល្បឿនកុំព្យូទ័រ", "ភាពខុសគ្នារវាង RAM, ROM និង Cache Memory"],
+                // 5
+                ["ការប្រៀបធៀបរវាង Hard Disk Drive (HDD) និង SSD", "បច្ចេកវិទ្យា M.2 NVMe SSD ជំនាន់ថ្មី"],
+                // 6
+                ["ការប្រើប្រាស់ ក្តារចុច (Keyboard) និង Mouse", "ឧបករណ៍ Input ផ្សេងៗ: Scanner, Webcam, Microphone"],
+                // 7
+                ["អេក្រង់កុំព្យូទ័រ Monitor (Resolution, Refresh Rate)", "ម៉ាស៊ីនព្រីន (Printer) និង Speaker Output"],
+                // 8
+                ["តួនាទីរបស់ Motherboard និង Ports តភ្ជាប់", "Power Supply Unit (PSU) និងប្រព័ន្ធត្រជាក់"],
+                // 9
+                ["អ្វីទៅជា Operating System (OS)?", "ការប្រៀបធៀប Windows, macOS, និង Linux"],
+                // 10
+                ["ចំណុចប្រទាក់ Windows Desktop, Taskbar, Start Menu", "ការដំឡើង និងការលុបកម្មវិធី (Install/Uninstall)"],
+                // 11
+                ["រចនាសម្ព័ន្ធ File, Folder, Drive, និង Directory", "ការស្វែងរក និងរៀបចំឯកសារអោយមានរបៀប"],
+                // 12
+                ["ការប្រើប្រាស់ Task Manager ពិនិត្យ Resource", "ការកំណត់ System Display, Sound, and Power Options"],
+                // 13
+                ["ការចាប់ផ្តើមប្រើប្រាស់ Microsoft Word", "ការកំណត់ Font, Size, Color និងរៀបចំ Paragraph"],
+                // 14
+                ["ការបញ្ចូលរូបភាព និមិត្តសញ្ញា និង Shapes", "ការបង្កើតតារាង Table ក្នុង Microsoft Word"],
+                // 15
+                ["ការកំណត់ទំហំក្រដាស Page Setup & Margins", "ការកំណត់ Header, Footer និងលេខទំព័រ Page Number"],
+                // 16
+                ["ចំណុចប្រទាក់ Microsoft Excel និង Cell Grid", "ការបញ្ចូលទិន្នន័យ និង Format កោសិកា Cell"],
+                // 17
+                ["ការប្រើប្រាស់រូបមន្តមូលដ្ឋាន SUM, AVERAGE, COUNT", "ការប្រើប្រាស់អនុគមន៍លក្ខខណ្ឌ IF និង nested IF"],
+                // 18
+                ["ការបង្កើត Chart/Graph បង្ហាញទិន្នន័យ", "ការតម្រៀប Sort និងតម្រង Filter ទិន្នន័យ"],
+                // 19
+                ["ការចាប់ផ្តើមជាមួយ Microsoft PowerPoint", "ការជ្រើសរើស Slide Design, Theme & Layout"],
+                // 20
+                ["ការថែម Animation, Transition និង Slide Show", "បច្ចេកទេសរចនាស្លាយឱ្យទាក់ទាញបែបអាជីព"],
+                // 21
+                ["តើអ្វីជា Internet និង World Wide Web (WWW)?", "របៀបដែលទិន្នន័យធ្វើដំណើរលើ Internet"],
+                // 22
+                ["ការប្រើប្រាស់ Chrome, Edge និង Tab Management", "ការគ្រប់គ្រង Bookmarks, History, និង Extension"],
+                // 23
+                ["ក្បួនស្វែងរក Search Operators លើ Google", "ការវាយតម្លៃប្រភពព័ត៌មានដែលគួរឱ្យទុកចិត្ត"],
+                // 24
+                ["ការបង្កើត និងប្រើប្រាស់ Gmail / Outlook", "ក្បួនសរសេរអ៊ីមែលផ្លូវការ (Email Etiquette)"],
+                // 25
+                ["ការប្រើប្រាស់ Google Dr
